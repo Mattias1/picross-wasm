@@ -1,0 +1,15 @@
+[package]
+name = "picross-wasm"
+version = "0.1.0"
+authors = ["Mattias Beimers"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2.63"
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = ["Document", "Element", "HtmlElement", "Window"]

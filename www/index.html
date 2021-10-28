@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Picross wasm</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="module">
+      import { default as init } from './picross_wasm.js';
+      await init();
+    </script>
+  <head>
+  <body>
+    <noscript>This page contains webassembly and javascript content and thusly requires scripts.</noscript>
+
+    <h1>Picross wasm</h1>
+    <p>
+      A little picross app made in rust and webassembly.
+    </p>
+
+    <div id="picross-wasm-player"></div>
+  </body>
+<html>

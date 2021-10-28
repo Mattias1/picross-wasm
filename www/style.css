@@ -1,0 +1,89 @@
+:root {
+  --pxw-font-size: 16px;
+  --pxw-margin: 12px;
+
+  --pxw-text: #eee;
+  --pxw-bg: #333;
+  --pxw-sq-empty: #555;
+  --pxw-sq-empty-hover: #666;
+  --pxw-sq-filled: #1a1a1a;
+  --pxw-sq-filled-hover: #2a2a2a;
+}
+
+/* ------- Global ------- */
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--pxw-bg);
+  color: var(--pxw-text);
+  font-size: var(--pxw-font-size);
+}
+h1, p {
+  margin-left: var(--pxw-margin);
+}
+
+/* ------- Picross specific ------- */
+.pxw-ul {
+  margin: 0 var(--pxw-margin);
+  padding: 0;
+  list-style-type: none;
+}
+.pxw-ul li {
+  height: 30px;
+  display: flex;
+}
+.pxw-ul li:first-child {
+  height: 50px;
+}
+.pxw-ul li:last-child .pxw-row, .pxw-ul li:last-child .pxw-square {
+  border-bottom: 1px solid #000;
+}
+.pxw-space, .pxw-row, .pxw-col, .pxw-square {
+  display: flex;
+  width: 30px;
+  height: 100%;
+  background-color: var(--pxw-sq-empty);
+  border-left: 1px solid #000;
+  border-top: 1px solid #000;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
+}
+.pxw-col:last-child, .pxw-square:last-child {
+  border-right: 1px solid #000;
+}
+.pxw-space {
+  width: 80px;
+  background-color: transparent;
+  border-color: transparent;
+}
+.pxw-row {
+  width: 80px;
+}
+
+.pxw-square.filled {
+  background-color: var(--pxw-sq-filled);
+}
+.pxw-square.empty::after {
+  color: var(--pxw-text);
+  content: "-";
+}
+.pxw-square:hover {
+  background-color: var(--pxw-sq-empty-hover);
+}
+.pxw-square.filled:hover {
+  background-color: var(--pxw-sq-filled-hover);
+}
