@@ -3,37 +3,44 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{Document, HtmlElement};
 
+mod puzzle;
+use puzzle::Puzzle;
+
 #[wasm_bindgen(start)]
 pub fn main() -> Result<(), JsValue> {
   let window = web_sys::window().expect("no global window exists");
   let document = window.document().expect("should have a document on window");
 
-  let puzzle: [[u8; 4]; 4] = [
-    [0, 1, 0, 0],
-    [1, 1, 1, 1],
-    [0, 1, 0, 0],
-    [0, 1, 0, 0]
-  ];
+  let puzzle = Puzzle::build(&vec![
+    vec![0, 1, 0, 0],
+    vec![1, 1, 1, 1],
+    vec![0, 1, 0, 1],
+    vec![1, 1, 0, 0]
+  ]);
 
   init_board(&document, &puzzle);
 
   Ok(())
 }
 
-fn init_board(document: &Document, puzzle: &[[u8; 4]; 4]) {
+fn init_board(document: &Document, puzzle: &Puzzle) {
   let parent = get_el(&document, "picross-wasm-player");
   let ul = append_el(document, &parent, "ul", None, Some("pxw-ul"));
 
   let li = append_el(document, &ul, "li", None, None);
-  append_el(document, &li, "div", None, Some("pxw-space"));
-  for x in 0..puzzle[0].len() {
-    append_el(document, &li, "div", Some(&format!("pxw-col-{}", x)), Some("pxw-col"));
+
+  for x in 0..puzzle.width() {
+    let col_div = append_el(document, &li, "div", Some(&format!("pxw-col-{}", x)), Some("pxw-col"));
+    col_div.set_inner_text(&puzzle.col_nrs(x));
   }
 
-  for (y, row) in puzzle.iter().enumerate() {
+  for y in 0..puzzle.height() {
     let li = append_el(document, &ul, "li", None, None);
-    append_el(document, &li, "div", Some(&format!("pxw-row-{}", y)), Some("pxw-row"));
-    for (x, _) in row.iter().enumerate() {
+
+    let row_div = append_el(document, &li, "div", Some(&format!("pxw-row-{}", y)), Some("pxw-row"));
+    row_div.set_inner_text(&puzzle.row_nrs(y));
+
+    for x in 0..puzzle.width() {
       append_el(document, &li, "a", Some(&format!("pxw-square-{}-{}", x, y)), Some("pxw-square"));
     }
   }

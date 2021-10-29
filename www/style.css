@@ -39,14 +39,16 @@ h1, p {
 .pxw-ul {
   margin: 0 var(--pxw-margin);
   padding: 0;
+  width: max-content;
   list-style-type: none;
 }
 .pxw-ul li {
   height: 30px;
   display: flex;
+  justify-content: flex-end;
 }
 .pxw-ul li:first-child {
-  height: 50px;
+  height: 105px;
 }
 .pxw-ul li:last-child .pxw-row, .pxw-ul li:last-child .pxw-square {
   border-bottom: 1px solid #000;
@@ -66,12 +68,17 @@ h1, p {
   border-right: 1px solid #000;
 }
 .pxw-space {
-  width: 80px;
   background-color: transparent;
   border-color: transparent;
 }
 .pxw-row {
-  width: 80px;
+  width: 135px;
+  padding-right: 6px;
+  justify-content: flex-end;
+}
+.pxw-col {
+  padding-bottom: 3px;
+  align-items: flex-end;
 }
 
 .pxw-square.filled {
