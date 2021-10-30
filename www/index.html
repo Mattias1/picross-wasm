@@ -5,8 +5,9 @@
     <title>Picross wasm</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="module">
-      import { default as init } from './picross_wasm.js';
+      import { default as init, load_puzzle } from './picross_wasm.js';
       await init();
+      await load_puzzle("eyes");
     </script>
   <head>
   <body>

@@ -6,6 +6,9 @@ use web_sys::{Document, HtmlElement};
 mod puzzle;
 use puzzle::Puzzle;
 
+mod puzzle_list;
+use puzzle_list::PuzzleList;
+
 // For debugging purposes
 /*
 #[wasm_bindgen]
@@ -16,24 +19,13 @@ extern "C" {
 
 static mut PUZZLE_STATIC: Option<Puzzle> = None;
 
-#[wasm_bindgen(start)]
-pub fn main() -> Result<(), JsValue> {
+#[wasm_bindgen]
+pub fn load_puzzle(name: &str) {
   // Using unsafe because we have a static mutable puzzle object
   unsafe {
-    PUZZLE_STATIC = Some(Puzzle::build(&vec![
-      vec![0, 1, 0, 0],
-      vec![1, 1, 1, 1],
-      vec![0, 1, 0, 1],
-      vec![1, 1, 0, 0]
-    ]));
+    PUZZLE_STATIC = PuzzleList::build_for_name(name);
   }
 
-  init_board();
-
-  Ok(())
-}
-
-fn init_board() {
   let puzzle = get_puzzle();
   let document = get_document();
 
@@ -42,27 +34,26 @@ fn init_board() {
 
   let li = append_el(&document, &ul, "li", None, None);
 
+  append_el(&document, &li, "div", None, Some("pxw-empty-space"));
   for x in 0..puzzle.width() {
-    let col_div = append_el(&document, &li, "div", Some(&format!("pxw-col-{}", x)), Some("pxw-col"));
+    let col_div = append_el(&document, &li, "div", Some(&format!("pxw-col-{}", x)), Some("pxw-el pxw-col"));
     col_div.set_inner_text(&puzzle.col_nrs(x));
   }
 
   for y in 0..puzzle.height() {
     let li = append_el(&document, &ul, "li", None, None);
 
-    let row_div = append_el(&document, &li, "div", Some(&format!("pxw-row-{}", y)), Some("pxw-row"));
+    let row_div = append_el(&document, &li, "div", Some(&format!("pxw-row-{}", y)), Some("pxw-el pxw-row"));
     row_div.set_inner_text(&puzzle.row_nrs(y));
 
     for x in 0..puzzle.width() {
-      let el = append_el(&document, &li, "a", Some(&format!("pxw-square-{}-{}", x, y)), Some("pxw-square"));
+      let el = append_el(&document, &li, "button", Some(&format!("pxw-square-{}-{}", x, y)), Some("pxw-el pxw-square"));
       add_puzzle_onclick(&el, x, y);
     }
   }
 }
 
 fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
-  el.set_attribute("href", "#").expect("Href error");
-
   let func = Closure::wrap(Box::new(move || {
     let puzzle = get_puzzle();
     let document = get_document();
@@ -71,7 +62,7 @@ fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
     let class_name = puzzle.get_class_name(x, y);
 
     let el = get_el(&document, &format!("pxw-square-{}-{}", x, y));
-    el.set_class_name(&format!("pxw-square {}", class_name));
+    el.set_class_name(&format!("pxw-el pxw-square {}", class_name));
   }) as Box<dyn FnMut()>);
 
   el.set_onclick(Some(func.as_ref().unchecked_ref()));

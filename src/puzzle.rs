@@ -1,12 +1,14 @@
 pub struct Puzzle {
+  pub name: String,
   answers: Vec<Vec<i32>>,
   values: Vec<Vec<i32>>,
 }
 
 impl Puzzle {
-  pub fn build(puzzle: &Vec<Vec<i32>>) -> Puzzle {
+  pub fn build(name: &str, puzzle: &Vec<Vec<i32>>) -> Puzzle {
     let height = if let Some(v) = puzzle.get(0) { v.len() } else { 0};
     Puzzle {
+      name: String::from(name),
       answers: puzzle.to_vec(),
       values: vec![vec![0; height]; puzzle.len()]
     }
