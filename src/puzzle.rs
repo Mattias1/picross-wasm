@@ -15,12 +15,26 @@ impl Puzzle {
   pub fn width(&self) -> usize {
     if let Some(v) = self.values.get(0) { v.len() } else { 0 }
   }
+
   pub fn height(&self) -> usize {
     self.values.len()
   }
 
   pub fn get(&self, x: usize, y: usize) -> i32 {
     self.values[y][x]
+  }
+
+  pub fn get_class_name(&self, x: usize, y: usize) -> String {
+    match self.get(x, y) {
+      0 => String::from(""),
+      1 => String::from("filled"),
+      2 => String::from("empty"),
+      _ => String::from("unknown")
+    }
+  }
+
+  pub fn toggle(&mut self, x: usize, y: usize) {
+    self.values[y][x] = (self.values[y][x] + 1) % 3;
   }
 
   pub fn row_nrs(&self, y: usize) -> String {
@@ -40,6 +54,7 @@ impl Puzzle {
     }
     result
   }
+
   pub fn col_nrs(&self, x: usize) -> String {
     let mut result = String::new();
     let mut curr = 0;
