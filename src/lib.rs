@@ -13,21 +13,23 @@ use puzzle_list::PuzzleList;
 /*
 #[wasm_bindgen]
 extern "C" {
-    fn alert(s: &str);
+  fn alert(s: &str);
 }
-*/ 
+*/
 
 static mut PUZZLE_STATIC: Option<Puzzle> = None;
+static mut MOUSE_IS_DOWN: bool = false;
 
 #[wasm_bindgen]
 pub fn load_puzzle(name: &str) {
-  // Using unsafe because we have a static mutable puzzle object
   unsafe {
     PUZZLE_STATIC = PuzzleList::build_for_name(name);
   }
 
   let puzzle = get_puzzle();
   let document = get_document();
+
+  add_mouse_up_down(&document);
 
   let parent = get_el(&document, "picross-wasm-player");
   let ul = append_el(&document, &parent, "ul", None, Some("pxw-ul"));
@@ -53,8 +55,52 @@ pub fn load_puzzle(name: &str) {
   }
 }
 
+fn add_mouse_up_down(document: &Document) {
+  let mousedown_func = Closure::wrap(Box::new(move || {
+    unsafe {
+      MOUSE_IS_DOWN = true;
+    }
+  }) as Box<dyn FnMut()>);
+
+  let mouseup_func = Closure::wrap(Box::new(move || {
+    unsafe {
+      MOUSE_IS_DOWN = false;
+    }
+  }) as Box<dyn FnMut()>);
+
+  document.set_onmousedown(Some(mousedown_func.as_ref().unchecked_ref()));
+  document.set_onmouseup(Some(mouseup_func.as_ref().unchecked_ref()));
+
+  // Deallocate - DOM-closures are ugly :/
+  mousedown_func.forget();
+  mouseup_func.forget();
+}
+
 fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
-  let func = Closure::wrap(Box::new(move || {
+  let mouseenter_func = Closure::wrap(Box::new(move || {
+    let mouse_is_down = unsafe {
+      MOUSE_IS_DOWN
+    };
+    if mouse_is_down {
+      toggle_square(x, y);
+    }
+  }) as Box<dyn FnMut()>);
+
+  let click_func = Closure::wrap(Box::new(move || {
+    toggle_square(x, y);
+  }) as Box<dyn FnMut()>);
+
+  el.set_draggable(false);
+
+  el.set_onmouseenter(Some(mouseenter_func.as_ref().unchecked_ref()));
+  el.set_onmousedown(Some(click_func.as_ref().unchecked_ref()));
+
+  // Deallocate - DOM-closures are ugly :/
+  mouseenter_func.forget();
+  click_func.forget();
+}
+
+fn toggle_square(x: usize, y: usize) {
     let puzzle = get_puzzle();
     let document = get_document();
 
@@ -63,12 +109,6 @@ fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
 
     let el = get_el(&document, &format!("pxw-square-{}-{}", x, y));
     el.set_class_name(&format!("pxw-el pxw-square {}", class_name));
-  }) as Box<dyn FnMut()>);
-
-  el.set_onclick(Some(func.as_ref().unchecked_ref()));
-
-  // Deallocate, dom-closures are ugly :/
-  func.forget();
 }
 
 fn get_el(document: &Document, id: &str) -> HtmlElement {
@@ -95,7 +135,6 @@ fn append_el(document: &Document, parent: &HtmlElement, el: &str, id: Option<&st
 }
 
 fn get_puzzle() -> &'static mut Puzzle {
-  // Using unsafe because we have a static mutable puzzle object
   unsafe {
     if let Some(pzl) = &mut PUZZLE_STATIC { pzl } else { panic!("The puzzle is not set") }
   }

@@ -5,7 +5,7 @@ pub struct PuzzleList { }
 impl PuzzleList {
   pub fn build_for_name(name: &str) -> Option<Puzzle> {
     let puzzles = PuzzleList::build_all();
-    puzzles.into_iter().find(|p| { p.name.to_lowercase() == name.to_lowercase() })
+    puzzles.into_iter().find(|p| p.name.to_lowercase() == name.to_lowercase())
   }
 
   fn build_all() -> Vec<Puzzle> {

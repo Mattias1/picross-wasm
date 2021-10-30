@@ -260,6 +260,12 @@ async function init(input) {
     }
     const imports = {};
     imports.wbg = {};
+    imports.wbg.__wbg_setonmousedown_0d4b0bb89adcdcfc = function(arg0, arg1) {
+        getObject(arg0).onmousedown = getObject(arg1);
+    };
+    imports.wbg.__wbg_setonmouseup_fd9c62aa2cb9ce17 = function(arg0, arg1) {
+        getObject(arg0).onmouseup = getObject(arg1);
+    };
     imports.wbg.__wbg_createElement_86c152812a141a62 = function() { return handleError(function (arg0, arg1, arg2) {
         var ret = getObject(arg0).createElement(getStringFromWasm0(arg1, arg2));
         return addHeapObject(ret);
@@ -281,8 +287,14 @@ async function init(input) {
     imports.wbg.__wbg_setinnerText_4f4ec715a9a131a0 = function(arg0, arg1, arg2) {
         getObject(arg0).innerText = getStringFromWasm0(arg1, arg2);
     };
-    imports.wbg.__wbg_setonclick_8da32c8c00a7359b = function(arg0, arg1) {
-        getObject(arg0).onclick = getObject(arg1);
+    imports.wbg.__wbg_setdraggable_5b28e9ac3a56893e = function(arg0, arg1) {
+        getObject(arg0).draggable = arg1 !== 0;
+    };
+    imports.wbg.__wbg_setonmousedown_2a7170820737f7a7 = function(arg0, arg1) {
+        getObject(arg0).onmousedown = getObject(arg1);
+    };
+    imports.wbg.__wbg_setonmouseenter_9bb8f5e9f4353e7c = function(arg0, arg1) {
+        getObject(arg0).onmouseenter = getObject(arg1);
     };
     imports.wbg.__wbg_appendChild_d318db34c4559916 = function() { return handleError(function (arg0, arg1) {
         var ret = getObject(arg0).appendChild(getObject(arg1));
@@ -341,7 +353,7 @@ async function init(input) {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper102 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper106 = function(arg0, arg1, arg2) {
         var ret = makeMutClosure(arg0, arg1, 14, __wbg_adapter_12);
         return addHeapObject(ret);
     };
