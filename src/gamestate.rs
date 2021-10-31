@@ -4,6 +4,7 @@ use super::puzzle_list::PuzzleList;
 pub struct GameState {
   current_puzzle: Option<Puzzle>,
   mouse_down: bool,
+  ctrl_down: bool,
 }
 
 impl GameState {
@@ -11,6 +12,7 @@ impl GameState {
     GameState {
       current_puzzle: None,
       mouse_down: false,
+      ctrl_down: false,
     }
   }
 
@@ -30,5 +32,15 @@ impl GameState {
   }
   pub fn release_mouse(&mut self) {
     self.mouse_down = false;
+  }
+
+  pub fn is_ctrl_down(&self) -> bool {
+    self.ctrl_down
+  }
+  pub fn press_ctrl(&mut self) {
+    self.ctrl_down = true;
+  }
+  pub fn release_ctrl(&mut self) {
+    self.ctrl_down = false;
   }
 }

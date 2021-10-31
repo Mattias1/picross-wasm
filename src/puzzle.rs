@@ -35,8 +35,12 @@ impl Puzzle {
     }
   }
 
-  pub fn toggle(&mut self, x: usize, y: usize) {
-    self.values[y][x] = (self.values[y][x] + 1) % 3;
+  pub fn toggle_filled(&mut self, x: usize, y: usize) {
+    self.values[y][x] = if self.values[y][x] == 1 { 0 } else { 1 };
+  }
+
+  pub fn toggle_empty(&mut self, x: usize, y: usize) {
+    self.values[y][x] = if self.values[y][x] == 2 { 0 } else { 2 };
   }
 
   pub fn row_nrs(&self, y: usize) -> String {

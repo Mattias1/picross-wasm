@@ -26,22 +26,41 @@ html {
 }
 
 body {
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   background-color: var(--global-bg);
   color: var(--pxw-text);
   font-size: var(--pxw-font-size);
 }
-h1, p {
+h1, h2, h3, ul, p {
   margin-left: var(--pxw-margin);
 }
 
 a {
-  color: #f80;
+  color: #fd3;
   text-decoration: none;
+}
+a.extern {
+  color: #f80;
 }
 a:hover {
   text-decoration: underline;
+}
+
+#puzzle-list {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0;
+  max-width: 100%;
+}
+#puzzle-list li {
+  margin-left: 22px;
+}
+
+#picross-wasm-player {
+  margin: 12px;
 }
 
 /* ------- Picross specific ------- */
