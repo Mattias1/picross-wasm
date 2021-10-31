@@ -5,9 +5,9 @@ use web_sys::{Document, HtmlElement};
 
 mod puzzle;
 use puzzle::Puzzle;
-
 mod puzzle_list;
-use puzzle_list::PuzzleList;
+mod gamestate;
+use gamestate::GameState;
 
 // For debugging purposes
 /*
@@ -17,16 +17,13 @@ extern "C" {
 }
 */
 
-static mut PUZZLE_STATIC: Option<Puzzle> = None;
-static mut MOUSE_IS_DOWN: bool = false;
+static mut GAMESTATE: Option<GameState> = None;
 
 #[wasm_bindgen]
 pub fn load_puzzle(name: &str) {
-  unsafe {
-    PUZZLE_STATIC = PuzzleList::build_for_name(name);
-  }
-
-  let puzzle = get_puzzle();
+  let gamestate = get_gamestate();
+  gamestate.load_puzzle(name);
+  let puzzle = gamestate.get_puzzle();
   let document = get_document();
 
   add_mouse_up_down(&document);
@@ -57,15 +54,13 @@ pub fn load_puzzle(name: &str) {
 
 fn add_mouse_up_down(document: &Document) {
   let mousedown_func = Closure::wrap(Box::new(move || {
-    unsafe {
-      MOUSE_IS_DOWN = true;
-    }
+    let gamestate = get_gamestate();
+    gamestate.click_mouse();
   }) as Box<dyn FnMut()>);
 
   let mouseup_func = Closure::wrap(Box::new(move || {
-    unsafe {
-      MOUSE_IS_DOWN = false;
-    }
+    let gamestate = get_gamestate();
+    gamestate.release_mouse();
   }) as Box<dyn FnMut()>);
 
   document.set_onmousedown(Some(mousedown_func.as_ref().unchecked_ref()));
@@ -78,16 +73,15 @@ fn add_mouse_up_down(document: &Document) {
 
 fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
   let mouseenter_func = Closure::wrap(Box::new(move || {
-    let mouse_is_down = unsafe {
-      MOUSE_IS_DOWN
-    };
-    if mouse_is_down {
-      toggle_square(x, y);
+    let gamestate = get_gamestate();
+    if gamestate.is_mouse_down() {
+      toggle_square(gamestate.get_puzzle(), x, y);
     }
   }) as Box<dyn FnMut()>);
 
   let click_func = Closure::wrap(Box::new(move || {
-    toggle_square(x, y);
+    let gamestate = get_gamestate();
+    toggle_square(gamestate.get_puzzle(), x, y);
   }) as Box<dyn FnMut()>);
 
   el.set_draggable(false);
@@ -100,13 +94,11 @@ fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
   click_func.forget();
 }
 
-fn toggle_square(x: usize, y: usize) {
-    let puzzle = get_puzzle();
-    let document = get_document();
-
+fn toggle_square(puzzle: &mut Puzzle, x: usize, y: usize) {
     puzzle.toggle(x, y);
     let class_name = puzzle.get_class_name(x, y);
 
+    let document = get_document();
     let el = get_el(&document, &format!("pxw-square-{}-{}", x, y));
     el.set_class_name(&format!("pxw-el pxw-square {}", class_name));
 }
@@ -134,9 +126,12 @@ fn append_el(document: &Document, parent: &HtmlElement, el: &str, id: Option<&st
   val
 }
 
-fn get_puzzle() -> &'static mut Puzzle {
+fn get_gamestate() -> &'static mut GameState {
   unsafe {
-    if let Some(pzl) = &mut PUZZLE_STATIC { pzl } else { panic!("The puzzle is not set") }
+    if let None = GAMESTATE {
+      GAMESTATE = Some(GameState::build());
+    }
+    if let Some(gamestate) = &mut GAMESTATE { gamestate } else { panic!("Gamestate not set") }
   }
 }
 

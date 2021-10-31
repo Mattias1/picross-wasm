@@ -2,8 +2,8 @@
   --pxw-font-size: 16px;
   --pxw-margin: 12px;
 
+  --global-bg: #444;
   --pxw-text: #eee;
-  --pxw-bg: #444;
   --pxw-border: #000;
   --pxw-sq-empty: #666;
   --pxw-sq-empty-hover: #777;
@@ -28,12 +28,20 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--pxw-bg);
+  background-color: var(--global-bg);
   color: var(--pxw-text);
   font-size: var(--pxw-font-size);
 }
 h1, p {
   margin-left: var(--pxw-margin);
+}
+
+a {
+  color: #f80;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 /* ------- Picross specific ------- */
