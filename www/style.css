@@ -5,6 +5,7 @@
   --global-bg: #444;
   --pxw-text: #eee;
   --pxw-border: #000;
+  --pxw-row-width: 135px;
   --pxw-sq-empty: #666;
   --pxw-sq-empty-hover: #777;
   --pxw-sq-filled: #333;
@@ -92,7 +93,7 @@ a:hover {
   align-items: center;
 }
 .pxw-row {
-  width: 135px;
+  width: var(--pxw-row-width);
   padding-right: 6px;
   justify-content: flex-end;
 }
@@ -127,4 +128,21 @@ a:hover {
 }
 .pxw-ul li .pxw-el:last-child {
   border-right: 2px solid var(--pxw-border);
+}
+
+.pxw-empty-space {
+  display: flex;
+  width: var(--pxw-row-width);
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+.pxw-empty-space span {
+  font-style: italic;
+  font-size: small;
+}
+.pxw-empty-space button {
+  width: 40px;
+  height: 30px;
+  margin: 3px;
 }

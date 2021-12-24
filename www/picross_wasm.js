@@ -215,6 +215,18 @@ export function load_puzzle(name) {
     wasm.load_puzzle(ptr0, len0);
 }
 
+/**
+* @param {string} name
+* @param {string} brush_button_class
+*/
+export function load_puzzle_with_button_class(name, brush_button_class) {
+    var ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len0 = WASM_VECTOR_LEN;
+    var ptr1 = passStringToWasm0(brush_button_class, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    wasm.load_puzzle_with_button_class(ptr0, len0, ptr1, len1);
+}
+
 function isLikeNone(x) {
     return x === undefined || x === null;
 }
@@ -295,6 +307,13 @@ async function init(input) {
     imports.wbg.__wbg_setid_681bb5a14c3d5850 = function(arg0, arg1, arg2) {
         getObject(arg0).id = getStringFromWasm0(arg1, arg2);
     };
+    imports.wbg.__wbg_className_bb755d836a61fdf0 = function(arg0, arg1) {
+        var ret = getObject(arg1).className;
+        var ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len0 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len0;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    };
     imports.wbg.__wbg_setclassName_7e8ab705edf23973 = function(arg0, arg1, arg2) {
         getObject(arg0).className = getStringFromWasm0(arg1, arg2);
     };
@@ -370,12 +389,12 @@ async function init(input) {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper319 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 53, __wbg_adapter_12);
+    imports.wbg.__wbindgen_closure_wrapper332 = function(arg0, arg1, arg2) {
+        var ret = makeMutClosure(arg0, arg1, 56, __wbg_adapter_12);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper321 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 51, __wbg_adapter_15);
+    imports.wbg.__wbindgen_closure_wrapper334 = function(arg0, arg1, arg2) {
+        var ret = makeMutClosure(arg0, arg1, 54, __wbg_adapter_15);
         return addHeapObject(ret);
     };
 

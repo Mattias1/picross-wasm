@@ -5,6 +5,7 @@ pub struct GameState {
   current_puzzle: Option<Puzzle>,
   mouse_down: bool,
   ctrl_down: bool,
+  flip_ctrl: bool,
 }
 
 impl GameState {
@@ -13,6 +14,7 @@ impl GameState {
       current_puzzle: None,
       mouse_down: false,
       ctrl_down: false,
+      flip_ctrl: false,
     }
   }
 
@@ -35,12 +37,18 @@ impl GameState {
   }
 
   pub fn is_ctrl_down(&self) -> bool {
-    self.ctrl_down
+    self.ctrl_down ^ self.flip_ctrl
   }
   pub fn press_ctrl(&mut self) {
     self.ctrl_down = true;
   }
   pub fn release_ctrl(&mut self) {
     self.ctrl_down = false;
+  }
+  pub fn flip_ctrl(&mut self) {
+    self.flip_ctrl = true;
+  }
+  pub fn unflip_ctrl(&mut self) {
+    self.flip_ctrl = false;
   }
 }
