@@ -39,7 +39,7 @@ pub fn load_puzzle_with_button_class(name: &str, brush_button_class: &str) {
   add_gamestate_modifiers(&document);
 }
 
-fn add_board_html(document: &Document, puzzle: &Puzzle) {
+fn add_board_html(document: &Document, puzzle: &mut Puzzle) {
   let parent = get_el(&document, "picross-wasm-player");
   parent.set_inner_html("");
 
@@ -64,26 +64,73 @@ fn add_board_html(document: &Document, puzzle: &Puzzle) {
       add_puzzle_onclick(&el, x, y);
     }
   }
+
+  set_size_class_based_on_column_size(&ul, puzzle);
+}
+
+fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
+  let mouseenter_func = Closure::wrap(Box::new(move || {
+    let gamestate = get_gamestate();
+    if gamestate.is_mouse_down() {
+      toggle_square(gamestate, x, y);
+    }
+  }) as Box<dyn FnMut()>);
+
+  let click_func = Closure::wrap(Box::new(move || {
+    let gamestate = get_gamestate();
+    toggle_square(gamestate, x, y);
+  }) as Box<dyn FnMut()>);
+
+  el.set_draggable(false);
+
+  el.set_onmouseenter(Some(mouseenter_func.as_ref().unchecked_ref()));
+  el.set_onmousedown(Some(click_func.as_ref().unchecked_ref()));
+
+  // Deallocate - DOM-closures are ugly :/
+  mouseenter_func.forget();
+  click_func.forget();
+}
+
+fn toggle_square(gamestate: &mut GameState, x: usize, y: usize) {
+  let is_ctrl_down = gamestate.is_ctrl_down();
+  let puzzle = gamestate.get_puzzle();
+  if is_ctrl_down {
+    puzzle.toggle_empty(x, y);
+  } else {
+    puzzle.toggle_filled(x, y);
+  }
+  let class_name = puzzle.get_class_name(x, y);
+
+  let document = get_document();
+  let el = get_el(&document, &format!("pxw-square-{}-{}", x, y));
+  el.set_class_name(&format!("pxw-el pxw-square {}", class_name));
+}
+
+fn set_size_class_based_on_column_size(el: &HtmlElement, puzzle: &Puzzle) {
+  let mut size_class = "";
+  if puzzle.get_max_col_count_so_far() <= 3 {
+    size_class = "small";
+  } else if puzzle.get_max_col_count_so_far() > 5 {
+    size_class = "large";
+  }
+  el.set_class_name(&format!("{} {}", el.class_name(), size_class));
 }
 
 fn add_brush_button_html(document: &Document, brush_button_class: &str) {
   let initial_button_el = get_el_optional(document, "picross-wasm-toggle-brush")
-    .unwrap_or_else(|| append_brush_button_el(document));
+    .unwrap_or_else(|| append_brush_button_el(document, brush_button_class));
   initial_button_el.set_inner_html("&#10002;");
-  initial_button_el.set_class_name(&format!("pxw-tb-fill {}", brush_button_class));
 
   let click_func = Closure::wrap(Box::new(move || {
     let button_el = get_el(&get_document(), "picross-wasm-toggle-brush");
     let gamestate = get_gamestate();
 
-    if button_el.class_name() == "pxw-tb-fill" {
-      gamestate.flip_ctrl();
-      button_el.set_inner_text("-");
-      button_el.set_class_name("pxw-tb-empty");
-    } else {
+    if button_el.inner_text() == "-" {
       gamestate.unflip_ctrl();
       button_el.set_inner_html("&#10002;");
-      button_el.set_class_name("pxw-tb-fill");
+    } else {
+      gamestate.flip_ctrl();
+      button_el.set_inner_text("-");
     }
   }) as Box<dyn FnMut()>);
 
@@ -93,9 +140,9 @@ fn add_brush_button_html(document: &Document, brush_button_class: &str) {
   click_func.forget();
 }
 
-fn append_brush_button_el(document: &Document) -> HtmlElement {
+fn append_brush_button_el(document: &Document, class_name: &str) -> HtmlElement {
   let parent = get_el(document, "pxw-empty-space");
-  let button_el = append_el(document, &parent, "button", Some("picross-wasm-toggle-brush"), None);
+  let button_el = append_el(document, &parent, "button", Some("picross-wasm-toggle-brush"), Some(class_name));
   let text_el = append_el(document, &parent, "span", None, None);
   text_el.set_inner_text("(or hold ctrl)");
   button_el
@@ -137,44 +184,6 @@ fn add_gamestate_modifiers(document: &Document) {
   mouseup_func.forget();
   keydown_func.forget();
   keyup_func.forget();
-}
-
-fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
-  let mouseenter_func = Closure::wrap(Box::new(move || {
-    let gamestate = get_gamestate();
-    if gamestate.is_mouse_down() {
-      toggle_square(gamestate, x, y);
-    }
-  }) as Box<dyn FnMut()>);
-
-  let click_func = Closure::wrap(Box::new(move || {
-    let gamestate = get_gamestate();
-    toggle_square(gamestate, x, y);
-  }) as Box<dyn FnMut()>);
-
-  el.set_draggable(false);
-
-  el.set_onmouseenter(Some(mouseenter_func.as_ref().unchecked_ref()));
-  el.set_onmousedown(Some(click_func.as_ref().unchecked_ref()));
-
-  // Deallocate - DOM-closures are ugly :/
-  mouseenter_func.forget();
-  click_func.forget();
-}
-
-fn toggle_square(gamestate: &mut GameState, x: usize, y: usize) {
-  let is_ctrl_down = gamestate.is_ctrl_down();
-  let puzzle = gamestate.get_puzzle();
-  if is_ctrl_down {
-    puzzle.toggle_empty(x, y);
-  } else {
-    puzzle.toggle_filled(x, y);
-  }
-  let class_name = puzzle.get_class_name(x, y);
-
-  let document = get_document();
-  let el = get_el(&document, &format!("pxw-square-{}-{}", x, y));
-  el.set_class_name(&format!("pxw-el pxw-square {}", class_name));
 }
 
 fn get_el(document: &Document, id: &str) -> HtmlElement {

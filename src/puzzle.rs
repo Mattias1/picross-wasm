@@ -2,6 +2,7 @@ pub struct Puzzle {
   pub name: String,
   answers: Vec<Vec<i32>>,
   values: Vec<Vec<i32>>,
+  max_col_count: i32,
 }
 
 impl Puzzle {
@@ -10,7 +11,8 @@ impl Puzzle {
     Puzzle {
       name: String::from(name),
       answers: puzzle.to_vec(),
-      values: vec![vec![0; height]; puzzle.len()]
+      values: vec![vec![0; height]; puzzle.len()],
+      max_col_count: 0
     }
   }
 
@@ -24,6 +26,10 @@ impl Puzzle {
 
   pub fn get(&self, x: usize, y: usize) -> i32 {
     self.values[y][x]
+  }
+
+  pub fn get_max_col_count_so_far(&self) -> i32 {
+    self.max_col_count
   }
 
   pub fn get_class_name(&self, x: usize, y: usize) -> String {
@@ -61,20 +67,26 @@ impl Puzzle {
     result
   }
 
-  pub fn col_nrs(&self, x: usize) -> String {
+  pub fn col_nrs(&mut self, x: usize) -> String {
     let mut result = String::new();
+    let mut count = 0;
     let mut curr = 0;
     for y in 0..self.height() {
       if self.answers[y][x] == 1 {
         curr += 1;
       } else if curr > 0 {
         result += &curr.to_string();
+        count += 1;
         result.push('\n');
         curr = 0;
       }
     }
     if curr > 0 {
       result += &curr.to_string();
+      count += 1;
+    }
+    if count > self.max_col_count {
+      self.max_col_count = count;
     }
     result
   }
