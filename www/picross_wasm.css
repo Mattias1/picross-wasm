@@ -5,11 +5,17 @@
   --global-bg: #444;
   --pxw-text: #eee;
   --pxw-border: #000;
-  --pxw-row-width: 135px;
   --pxw-sq-empty: #666;
   --pxw-sq-empty-hover: #777;
   --pxw-sq-filled: #333;
   --pxw-sq-filled-hover: #444;
+
+  --pxw-row-width: 130px;
+  --pxw-row-width-small: 100px;
+  --pxw-row-width-large: 160px;
+  --pxw-col-height: 110px;
+  --pxw-col-height-small: 70px;
+  --pxw-col-height-large: 150px;
 }
 
 /* ------- Global ------- */
@@ -35,7 +41,11 @@ body {
   color: var(--pxw-text);
   font-size: var(--pxw-font-size);
 }
-h1, h2, h3, ul, p {
+.container {
+  width: 900px;
+  margin: 0 auto;
+}
+h1, h2, h3, ul, p, .p-like {
   margin-left: var(--pxw-margin);
 }
 
@@ -64,12 +74,26 @@ a:hover {
   margin: 12px;
 }
 
+/* ------- Tutorial rows ------- */
+.row {
+  display: flex;
+  flex-flow: row nowrap;
+}
+.row > div {
+  padding-left: 12px;
+}
+.smaller-column {
+  max-width: 400px;
+}
+
 /* ------- Picross specific ------- */
 .pxw-ul {
   margin: 0 var(--pxw-margin);
   padding: 0;
   width: max-content;
   list-style-type: none;
+  color: var(--pxw-text);
+  font-size: var(--pxw-font-size);
 }
 .pxw-ul li {
   height: 30px;
@@ -77,7 +101,13 @@ a:hover {
   justify-content: flex-end;
 }
 .pxw-ul li:first-child {
-  height: 105px;
+  height: var(--pxw-col-height);
+}
+.pxw-ul.small li:first-child {
+  height: var(--pxw-col-height-small);
+}
+.pxw-ul.large li:first-child {
+  height: var(--pxw-col-height-large);
 }
 .pxw-el {
   display: flex;
@@ -96,6 +126,12 @@ a:hover {
   width: var(--pxw-row-width);
   padding-right: 6px;
   justify-content: flex-end;
+}
+.pxw-ul.small .pxw-row {
+  width: var(--pxw-row-width-small);
+}
+.pxw-ul.large .pxw-row {
+  width: var(--pxw-row-width-large);
 }
 .pxw-col {
   padding-bottom: 3px;
@@ -136,6 +172,12 @@ a:hover {
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
+}
+.pxw-ul.small .pxw-empty-space {
+  width: var(--pxw-row-width-small);
+}
+.pxw-ul.large .pxw-empty-space {
+  width: var(--pxw-row-width-large);
 }
 .pxw-empty-space span {
   font-style: italic;

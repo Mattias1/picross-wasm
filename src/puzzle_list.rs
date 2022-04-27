@@ -11,6 +11,14 @@ impl PuzzleList {
   fn build_all() -> Vec<Puzzle> {
     let mut puzzles = vec!();
 
+    puzzles.push(Puzzle::build("Tutorial stripe", &vec![
+      vec![0,0,0,1,1],
+      vec![0,0,1,1,1],
+      vec![0,1,1,1,1],
+      vec![1,1,1,1,0],
+      vec![1,1,1,0,0]
+    ]));
+
     puzzles.push(Puzzle::build("Eyes", &vec![
       vec![0,1,1,1,1,1,0,0,0,0,0,0],
       vec![1,1,0,0,0,1,1,0,0,0,0,0],

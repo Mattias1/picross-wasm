@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>Picross wasm</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost:8000/picross_wasm.css">
     <script type="module">
-      import { default as init, load_puzzle } from './picross_wasm.js';
+      import { default as init, load_puzzle } from 'http://localhost:8000/picross_wasm.js';
       await init();
       await load_puzzle("eyes");
 
@@ -14,43 +14,52 @@
         return false;
       };
     </script>
+    <script type="text/javascript" nomodule>
+      console.error('Modules are not supported. Are you on an old browser, of is addblocker blocking things?');
+    </script>
   <head>
   <body>
-    <noscript>This page contains webassembly and javascript content and thusly requires scripts.</noscript>
+    <div class="container">
+      <noscript>This page contains webassembly and javascript content and thusly requires scripts.</noscript>
 
-    <h1>Picross wasm</h1>
-    <p>
-      A little picross app made in rust and webassembly.
-      The sourcecode is on <a class="extern" href="https://github.com/Mattias1/picross-wasm">github</a>.
-    </p>
-    <h3>Puzzles</h3>
-    <ul id="puzzle-list">
-      <li><a href="#" onclick="window.load_puzzle('Eyes');">Eyes</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Ghost');">Ghost</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Companion cube');">Companion cube</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Union Jack');">Union Jack</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Guitar');">Guitar</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Grand piano');">Grand piano</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Music notes');">Music notes</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Minibat');">Minibat</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Tulip');">Tulip</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Ranger II');">Ranger II</a></li>
-      <li><a href="#" onclick="window.load_puzzle('MiG-29');">MiG-29</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Duck');">Duck</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Bunny');">Bunny</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Dinosaur');">Dinosaur</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Dragon I');">Dragon I</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Dolphin');">Dolphin</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Tiger');">Tiger</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Spider');">Spider</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Parrot');">Parrot</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Stag');">Stag</a></li>
-      <li><a href="#" onclick="window.load_puzzle('Dove');">Dove</a></li>
-    </ul>
+      <h1>Picross wasm</h1>
+      <p>
+        A little picross app made in rust and webassembly.
+        The sourcecode is on <a class="extern" href="https://github.com/Mattias1/picross-wasm">github</a>.
+      </p>
+      <p>
+        If you don't know how to play, I've made a little <a href="http://localhost:8000/tutorial">tutorial</a>.
+      </p>
 
-    <div id="picross-wasm-player"></div>
+      <h3>Puzzles</h3>
+      <ul id="puzzle-list">
+        <li><a href="#" onclick="window.load_puzzle('Eyes');">Eyes</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Ghost');">Ghost</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Companion cube');">Companion cube</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Union Jack');">Union Jack</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Guitar');">Guitar</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Grand piano');">Grand piano</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Music notes');">Music notes</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Minibat');">Minibat</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Tulip');">Tulip</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Ranger II');">Ranger II</a></li>
+        <li><a href="#" onclick="window.load_puzzle('MiG-29');">MiG-29</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Duck');">Duck</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Bunny');">Bunny</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Dinosaur');">Dinosaur</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Dragon I');">Dragon I</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Dolphin');">Dolphin</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Tiger');">Tiger</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Spider');">Spider</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Parrot');">Parrot</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Stag');">Stag</a></li>
+        <li><a href="#" onclick="window.load_puzzle('Dove');">Dove</a></li>
+      </ul>
 
-    <!-- This button can be overridden, in case you want full control over it -->
-    <!-- <button id="picross-wasm-toggle-brush"></button> -->
+      <div id="picross-wasm-player"></div>
+
+      <!-- This button can be overridden, in case you want full control over it -->
+      <!-- <button id="picross-wasm-toggle-brush"></button> -->
+    </div>
   </body>
 <html>

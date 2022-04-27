@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Picross wasm | Tutorial</title>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8000/picross_wasm.css">
+    <script type="module">
+      import { default as init, load_tutorial_puzzle } from 'http://localhost:8000/picross_wasm.js';
+      await init();
+      await load_tutorial_puzzle("tutorial-puzzle");
+    </script>
+    <script type="text/javascript" nomodule>
+      console.error('Modules are not supported. Are you on an old browser, of is addblocker blocking things?');
+    </script>
+  <head>
+  <body>
+    <div class="container">
+      <noscript>This page contains webassembly and javascript content and thusly requires scripts.</noscript>
+
+      <h1>Picross tutorial</h1>
+      <p>
+        Here's a tutorial on how to solve a simple picross puzzle with some stripes, have fun!
+      </p>
+
+      <!-- An empty example puzzle -->
+      <div class="row p-like">
+        <div><img src="tutorial-0.png" alt="An empty picross puzzle"></div>
+        <div>
+          <p>
+            To the left you see an example of a picross puzzle. The numbers tell you how many
+            consecutive squares in the row or column should be coloured.<br>
+            For example, the bottom row has a 3 and a 1. That means that three consecutive squares
+            need to be coloured, then there needs to be some empty space, and then one more square is
+            coloured.<br>
+            Since there are in total five squares to fill, there's only one way to do that:
+          </p>
+          <p>
+            <img src="tutorial-0-1.png" alt="The bottom row"><br>
+            This means we have solved our first row, hooray!
+          </p>
+          <p>
+            Most puzzles don't have a row where you can colour all squares right away, so let's look
+            at a slightly modified version of this puzzle to make it a bit more interesting.
+          </p>
+        </div>
+      </div>
+
+      <!-- The tutorial puzzle - the first row -->
+      <div class="row p-like">
+        <div><img src="tutorial-1.png" alt="A slightly modified empty picross puzzle"></div>
+        <div>
+          <p>
+            If we look at a row with a 4, there are two possibilities: it can be the 4 squares on
+            the right, or on the left. In both cases the middle 3 squares are filled, so we can
+            colour them already and wait for later revelations to see if the right or the left
+            square should be coloured.
+          </p>
+          <p>
+            <img src="tutorial-1-1.png" alt="A row with a 4"><br>
+          </p>
+        </div>
+      </div>
+
+      <!-- The tutorial puzzle - the column -->
+      <div class="row p-like">
+        <div><img src="tutorial-2.png" alt="The result so far"></div>
+        <div>
+          <p>
+            If you've added information to a row, it often makes sense to check if that gives you
+            more information for affected columns.
+          </p>
+          <p>
+            The affected column with a 3 for example now has one less possibility. Because of that, we
+            now know one square that can be coloured.<br>
+            Also, we know that the top square can never be coloured, so we can mark it as empty.
+          </p>
+        </div>
+        <div>
+            <img src="tutorial-2-1.png" alt="A row with a 4">
+        </div>
+      </div>
+
+      <!-- The tutorial puzzle - the last row -->
+      <div class="row p-like">
+        <div><img src="tutorial-3.png" alt="The column with a 3 where we know a coloured square"></div>
+        <div>
+          <p>
+            We just added information to a column so let's look at the corresponding row.
+          </p>
+          <p>
+            To the left of the square that we know has to be empty, there is not enough space for 2
+            squares. That means the 2 squares have to be on its right. That leaves two possibilities.
+          </p>
+          <p>
+            <img src="tutorial-3-1.png" alt="A row with a 2 where we know a square to be empty"><br>
+          </p>
+        </div>
+      </div>
+
+      <!-- The tutorial puzzle - for you to finish -->
+      <div class="row p-like">
+        <div class="smaller-column">
+          <p>
+            And that's the basics of how to solve a picross puzzle.
+          </p>
+          <p>
+            You can complete the puzzle over here to the right
+            (click to colour a square black, Ctrl-click one to mark it as empty),
+            or you can try some of my <a href="http://localhost:8000">other puzzles</a>.
+          </p>
+        </div>
+        <div>
+          <div id="picross-wasm-player"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+<html>
