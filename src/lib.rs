@@ -26,6 +26,30 @@ pub fn load_puzzle(name: &str) {
 }
 
 #[wasm_bindgen]
+pub fn load_tutorial_puzzle(brush_button_class: &str) {
+  load_puzzle_with_button_class("Tutorial stripe", brush_button_class);
+
+  let gamestate = get_gamestate();
+
+  // Last 4-row
+  toggle_square(gamestate, 1, 3);
+  toggle_square(gamestate, 2, 3);
+  toggle_square(gamestate, 3, 3);
+
+  // First 3-column
+  gamestate.press_ctrl();
+  toggle_square(gamestate, 1, 0);
+  gamestate.release_ctrl();
+  toggle_square(gamestate, 1, 2);
+
+  // (First) 2-row
+  gamestate.press_ctrl();
+  toggle_square(gamestate, 0, 0);
+  gamestate.release_ctrl();
+  toggle_square(gamestate, 3, 0);
+}
+
+#[wasm_bindgen]
 pub fn load_puzzle_with_button_class(name: &str, brush_button_class: &str) {
   let gamestate = get_gamestate();
   gamestate.load_puzzle(name);
@@ -86,7 +110,7 @@ fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
   el.set_onmouseenter(Some(mouseenter_func.as_ref().unchecked_ref()));
   el.set_onmousedown(Some(click_func.as_ref().unchecked_ref()));
 
-  // Deallocate - DOM-closures are ugly :/
+  // Deallocate manually - DOM-closures are ugly :/
   mouseenter_func.forget();
   click_func.forget();
 }
@@ -136,7 +160,7 @@ fn add_brush_button_html(document: &Document, brush_button_class: &str) {
 
   initial_button_el.set_onmousedown(Some(click_func.as_ref().unchecked_ref()));
 
-  // Deallocate - DOM-closures are ugly :/
+  // Deallocate manually - DOM-closures are ugly :/
   click_func.forget();
 }
 
@@ -179,7 +203,7 @@ fn add_gamestate_modifiers(document: &Document) {
   document.set_onkeydown(Some(keydown_func.as_ref().unchecked_ref()));
   document.set_onkeyup(Some(keyup_func.as_ref().unchecked_ref()));
 
-  // Deallocate - DOM-closures are ugly :/
+  // Deallocate manually - DOM-closures are ugly :/
   mousedown_func.forget();
   mouseup_func.forget();
   keydown_func.forget();
