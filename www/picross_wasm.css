@@ -132,7 +132,7 @@ a:hover {
 }
 #picross-wasm-player .pxw-row {
   width: var(--pxw-row-width);
-  padding-right: 6px;
+  padding-right: 3px;
   justify-content: flex-end;
   font-size: var(--pxw-font-size);
 }
