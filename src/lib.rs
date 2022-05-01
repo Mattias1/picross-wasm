@@ -67,21 +67,33 @@ fn add_board_html(document: &Document, puzzle: &mut Puzzle) {
   let parent = get_el(&document, "picross-wasm-player");
   parent.set_inner_html("");
 
+  let mut nr_index = 1;
+
   let ul = append_el(&document, &parent, "ul", None, Some("pxw-ul"));
 
   let li = append_el(&document, &ul, "li", None, None);
 
-  append_el(&document, &li, "div", Some("pxw-empty-space"), Some("pxw-empty-space"));
+  let empty_space_div = append_el(&document, &li, "div", Some("pxw-empty-space"), Some("pxw-empty-space"));
   for x in 0..puzzle.width() {
     let col_div = append_el(&document, &li, "div", Some(&format!("pxw-col-{}", x)), Some("pxw-el pxw-col"));
-    col_div.set_inner_text(&puzzle.col_nrs(x));
+    for nr in &puzzle.col_nrs(x) {
+      let nr_span = append_el(&document, &col_div, "span", Some(&format!("pxw-nr-{}", nr_index)), Some("pxw-nr"));
+      add_nr_span_toggle(&nr_span);
+      nr_span.set_inner_text(&nr.to_string());
+      nr_index += 1;
+    }
   }
 
   for y in 0..puzzle.height() {
     let li = append_el(&document, &ul, "li", None, None);
 
     let row_div = append_el(&document, &li, "div", Some(&format!("pxw-row-{}", y)), Some("pxw-el pxw-row"));
-    row_div.set_inner_text(&puzzle.row_nrs(y));
+    for nr in &puzzle.row_nrs(y) {
+      let nr_span = append_el(&document, &row_div, "span", Some(&format!("pxw-nr-{}", nr_index)), Some("pxw-nr"));
+      add_nr_span_toggle(&nr_span);
+      nr_span.set_inner_text(&nr.to_string());
+      nr_index += 1;
+    }
 
     for x in 0..puzzle.width() {
       let el = append_el(&document, &li, "button", Some(&format!("pxw-square-{}-{}", x, y)), Some("pxw-el pxw-square"));
@@ -90,6 +102,9 @@ fn add_board_html(document: &Document, puzzle: &mut Puzzle) {
   }
 
   set_size_class_based_on_column_size(&ul, puzzle);
+
+  let congratz_div = append_el(&document, &empty_space_div, "div", Some("pxw-congratz"), None);
+  congratz_div.set_inner_text("Congratulations!");
 }
 
 fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
@@ -128,6 +143,28 @@ fn toggle_square(gamestate: &mut GameState, x: usize, y: usize) {
   let document = get_document();
   let el = get_el(&document, &format!("pxw-square-{}-{}", x, y));
   el.set_class_name(&format!("pxw-el pxw-square {}", class_name));
+
+  let congratz_el = get_el(&document, "pxw-congratz");
+  congratz_el.set_class_name(if puzzle.is_solved() { "visible" } else { "" });
+}
+
+fn add_nr_span_toggle(el: &HtmlElement) {
+  let el_id = el.id();
+
+  let click_func = Closure::wrap(Box::new(move || {
+    let document = get_document();
+    let el = get_el(&document, &el_id);
+    if el.class_name().contains("pxw-nr-marked") {
+      el.set_class_name("pxw-nr");
+    } else {
+      el.set_class_name("pxw-nr pxw-nr-marked");
+    }
+  }) as Box<dyn FnMut()>);
+
+  el.set_onclick(Some(click_func.as_ref().unchecked_ref()));
+
+  // Deallocate manually - DOM-closures are ugly :/
+  click_func.forget();
 }
 
 fn set_size_class_based_on_column_size(el: &HtmlElement, puzzle: &Puzzle) {

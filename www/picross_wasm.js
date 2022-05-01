@@ -313,6 +313,13 @@ async function init(input) {
         var ret = getObject(arg0).getElementById(getStringFromWasm0(arg1, arg2));
         return isLikeNone(ret) ? 0 : addHeapObject(ret);
     };
+    imports.wbg.__wbg_id_3b922e7e3a1e85f3 = function(arg0, arg1) {
+        var ret = getObject(arg1).id;
+        var ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len0 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len0;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    };
     imports.wbg.__wbg_setid_681bb5a14c3d5850 = function(arg0, arg1, arg2) {
         getObject(arg0).id = getStringFromWasm0(arg1, arg2);
     };
@@ -345,6 +352,9 @@ async function init(input) {
     };
     imports.wbg.__wbg_setdraggable_5b28e9ac3a56893e = function(arg0, arg1) {
         getObject(arg0).draggable = arg1 !== 0;
+    };
+    imports.wbg.__wbg_setonclick_8da32c8c00a7359b = function(arg0, arg1) {
+        getObject(arg0).onclick = getObject(arg1);
     };
     imports.wbg.__wbg_setonmousedown_2a7170820737f7a7 = function(arg0, arg1) {
         getObject(arg0).onmousedown = getObject(arg1);
@@ -405,12 +415,12 @@ async function init(input) {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper434 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 33, __wbg_adapter_12);
+    imports.wbg.__wbindgen_closure_wrapper473 = function(arg0, arg1, arg2) {
+        var ret = makeMutClosure(arg0, arg1, 36, __wbg_adapter_12);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper436 = function(arg0, arg1, arg2) {
-        var ret = makeMutClosure(arg0, arg1, 35, __wbg_adapter_15);
+    imports.wbg.__wbindgen_closure_wrapper475 = function(arg0, arg1, arg2) {
+        var ret = makeMutClosure(arg0, arg1, 38, __wbg_adapter_15);
         return addHeapObject(ret);
     };
 
