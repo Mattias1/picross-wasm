@@ -32,3 +32,6 @@ and:
   await load_puzzle("eyes");
 </script>
 ```
+You may also need to set the Content-Type of `.wasm` files to `application/wasm`
+(unfortunatly not all webservers do that correctly yet) or modify your
+Content-Security-Policy header.

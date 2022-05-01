@@ -10,6 +10,7 @@
   --pxw-sq-filled: #333;
   --pxw-sq-filled-hover: #444;
 
+  --pxw-el-size: 30px;
   --pxw-row-width: 130px;
   --pxw-row-width-small: 100px;
   --pxw-row-width-large: 160px;
@@ -39,6 +40,7 @@ body {
   padding: 0;
   background-color: var(--global-bg);
   color: var(--pxw-text);
+  font-family: serif;
   font-size: var(--pxw-font-size);
 }
 .container {
@@ -75,19 +77,19 @@ a:hover {
 }
 
 /* ------- Tutorial rows ------- */
-.row {
+.pxw-tutorial-row {
   display: flex;
   flex-flow: row nowrap;
 }
-.row > div {
+.pxw-tutorial-row > div {
   padding-left: 12px;
 }
-.smaller-column {
+.pxw-tutorial-smaller-column {
   max-width: 400px;
 }
 
 /* ------- Picross specific ------- */
-.pxw-ul {
+#picross-wasm-player .pxw-ul {
   margin: 0 var(--pxw-margin);
   padding: 0;
   width: max-content;
@@ -95,23 +97,23 @@ a:hover {
   color: var(--pxw-text);
   font-size: var(--pxw-font-size);
 }
-.pxw-ul li {
-  height: 30px;
+#picross-wasm-player .pxw-ul li {
+  height: var(--pxw-el-size);
   display: flex;
   justify-content: flex-end;
 }
-.pxw-ul li:first-child {
+#picross-wasm-player .pxw-ul li:first-child {
   height: var(--pxw-col-height);
 }
-.pxw-ul.small li:first-child {
+#picross-wasm-player .pxw-ul.small li:first-child {
   height: var(--pxw-col-height-small);
 }
-.pxw-ul.large li:first-child {
+#picross-wasm-player .pxw-ul.large li:first-child {
   height: var(--pxw-col-height-large);
 }
-.pxw-el {
+#picross-wasm-player .pxw-el {
   display: flex;
-  width: 30px;
+  width: var(--pxw-el-size);
   height: 100%;
   background-color: var(--pxw-sq-empty);
   border-top: 1px solid var(--pxw-border);
@@ -121,70 +123,81 @@ a:hover {
   text-decoration: none;
   justify-content: center;
   align-items: center;
+  font-size: var(--pxw-font-size);
+  min-width: initial;
+  min-height: initial;
+  border-radius: initial;
+  margin: 0;
+  padding: 0;
 }
-.pxw-row {
+#picross-wasm-player .pxw-row {
   width: var(--pxw-row-width);
   padding-right: 6px;
   justify-content: flex-end;
+  font-size: var(--pxw-font-size);
 }
-.pxw-ul.small .pxw-row {
+#picross-wasm-player .pxw-ul.small .pxw-row {
   width: var(--pxw-row-width-small);
 }
-.pxw-ul.large .pxw-row {
+#picross-wasm-player .pxw-ul.large .pxw-row {
   width: var(--pxw-row-width-large);
 }
-.pxw-col {
+#picross-wasm-player .pxw-col {
   padding-bottom: 3px;
   align-items: flex-end;
+  font-size: var(--pxw-font-size);
 }
 
-.pxw-square.filled {
+#picross-wasm-player .pxw-square.filled {
   background-color: var(--pxw-sq-filled);
 }
-.pxw-square.empty::after {
+#picross-wasm-player .pxw-square.empty::after {
   color: var(--pxw-text);
   content: "-";
 }
-.pxw-square:hover {
+#picross-wasm-player .pxw-square:hover {
   cursor: pointer;
   background-color: var(--pxw-sq-empty-hover);
 }
-.pxw-square.filled:hover {
+#picross-wasm-player .pxw-square.filled:hover {
   background-color: var(--pxw-sq-filled-hover);
 }
 
-.pxw-ul li:first-child .pxw-el, .pxw-ul li:nth-child(5n+2) .pxw-el {
+#picross-wasm-player .pxw-ul li:first-child .pxw-el, #picross-wasm-player .pxw-ul li:nth-child(5n+2) .pxw-el {
   border-top: 2px solid var(--pxw-border);
 }
-.pxw-ul li:last-child .pxw-el {
+#picross-wasm-player .pxw-ul li:last-child .pxw-el {
   border-bottom: 2px solid var(--pxw-border);
 }
-.pxw-ul li .pxw-el:first-child, .pxw-ul li .pxw-el:nth-child(5n+2) {
+#picross-wasm-player .pxw-ul li .pxw-el:first-child, #picross-wasm-player .pxw-ul li .pxw-el:nth-child(5n+2) {
   border-left: 2px solid var(--pxw-border);
 }
-.pxw-ul li .pxw-el:last-child {
+#picross-wasm-player .pxw-ul li .pxw-el:last-child {
   border-right: 2px solid var(--pxw-border);
 }
 
-.pxw-empty-space {
+#picross-wasm-player .pxw-empty-space {
   display: flex;
   width: var(--pxw-row-width);
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
 }
-.pxw-ul.small .pxw-empty-space {
+#picross-wasm-player .pxw-ul.small .pxw-empty-space {
   width: var(--pxw-row-width-small);
 }
-.pxw-ul.large .pxw-empty-space {
+#picross-wasm-player .pxw-ul.large .pxw-empty-space {
   width: var(--pxw-row-width-large);
 }
-.pxw-empty-space span {
+#picross-wasm-player .pxw-empty-space span {
   font-style: italic;
   font-size: small;
 }
-.pxw-empty-space button {
+#picross-wasm-player .pxw-empty-space button {
   width: 40px;
   height: 30px;
   margin: 3px;
+  font-size: var(--pxw-font-size);
+  min-width: initial;
+  min-height: initial;
 }
