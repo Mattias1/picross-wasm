@@ -130,9 +130,19 @@ a:hover {
   margin: 0;
   padding: 0;
 }
+#picross-wasm-player .pxw-nr {
+  position: relative;
+  margin: 0;
+  padding: 0 4px;
+  text-align: center;
+  border-radius: 4px;
+}
+#picross-wasm-player .pxw-nr:hover {
+  background-color: var(--pxw-sq-empty-hover);
+  cursor: pointer;
+}
 #picross-wasm-player .pxw-row {
   width: var(--pxw-row-width);
-  padding-right: 3px;
   justify-content: flex-end;
   font-size: var(--pxw-font-size);
 }
@@ -142,10 +152,25 @@ a:hover {
 #picross-wasm-player .pxw-ul.large .pxw-row {
   width: var(--pxw-row-width-large);
 }
+#picross-wasm-player .pxw-row .pxw-nr {
+  margin-right: 1px;
+}
 #picross-wasm-player .pxw-col {
-  padding-bottom: 3px;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
   font-size: var(--pxw-font-size);
+}
+#picross-wasm-player .pxw-nr.pxw-nr-marked::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  border-bottom: 1px solid var(--pxw-text);
+  width: 82%;
+  top: 50%;
+  left: 9%;
+  transform: rotate(-36deg);
+  transform-origin: center;
 }
 
 #picross-wasm-player .pxw-square.filled {
@@ -177,6 +202,7 @@ a:hover {
 }
 
 #picross-wasm-player .pxw-empty-space {
+  position: relative;
   display: flex;
   width: var(--pxw-row-width);
   flex-flow: column wrap;
@@ -200,4 +226,30 @@ a:hover {
   font-size: var(--pxw-font-size);
   min-width: initial;
   min-height: initial;
+}
+
+#picross-wasm-player #pxw-congratz {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: var(--pxw-row-width);
+  margin: 16px 8px;
+  padding: 10px 6px 12px 8px;
+  color: var(--pxw-text);
+  text-shadow: 1px 1px 3px var(--pxw-border);
+  font-size: calc(var(--pxw-font-size) * 2);
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  transform: rotate(-4deg);
+  z-index: 1;
+}
+#picross-wasm-player #pxw-congratz.visible {
+  display: block;
+}
+#picross-wasm-player .pxw-ul.small #pxw-congratz {
+  left: var(--pxw-row-width-small);
+}
+#picross-wasm-player .pxw-ul.large #pxw-congratz {
+  left: var(--pxw-row-width-large);
 }
