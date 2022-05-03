@@ -41,12 +41,16 @@ impl Puzzle {
     }
   }
 
-  pub fn toggle_filled(&mut self, x: usize, y: usize) {
-    self.values[y][x] = if self.values[y][x] == 1 { 0 } else { 1 };
+  pub fn fill_at(&mut self, x: usize, y: usize) {
+    self.values[y][x] = 1;
   }
 
-  pub fn toggle_empty(&mut self, x: usize, y: usize) {
-    self.values[y][x] = if self.values[y][x] == 2 { 0 } else { 2 };
+  pub fn empty_at(&mut self, x: usize, y: usize) {
+    self.values[y][x] = 2;
+  }
+
+  pub fn clear_at(&mut self, x: usize, y: usize) {
+    self.values[y][x] = 0;
   }
 
   pub fn row_nrs(&self, y: usize) -> Vec<i32> {

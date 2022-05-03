@@ -6,6 +6,7 @@ pub struct GameState {
   mouse_down: bool,
   ctrl_down: bool,
   flip_ctrl: bool,
+  erasing: bool,
 }
 
 impl GameState {
@@ -15,6 +16,7 @@ impl GameState {
       mouse_down: false,
       ctrl_down: false,
       flip_ctrl: false,
+      erasing: false,
     }
   }
 
@@ -24,6 +26,33 @@ impl GameState {
 
   pub fn get_puzzle(&mut self) -> &mut Puzzle {
     if let Some(pzl) = &mut self.current_puzzle { pzl } else { panic!("No puzzle is loaded.") }
+  }
+
+  pub fn modify_square(&mut self, x: usize, y: usize) {
+    let erasing = self.is_erasing();
+    let is_ctrl_down = self.is_ctrl_down();
+
+    let puzzle = self.get_puzzle();
+    if erasing {
+      puzzle.clear_at(x, y);
+    } else if is_ctrl_down {
+      puzzle.empty_at(x, y);
+    } else {
+      puzzle.fill_at(x, y);
+    }
+  }
+
+  fn is_erasing(&self) -> bool {
+    self.erasing
+  }
+  pub fn mark_erase_or_not(&mut self, x: usize, y: usize) {
+    let is_ctrl_down = self.is_ctrl_down();
+    let puzzle = self.get_puzzle();
+    if is_ctrl_down {
+      self.erasing = puzzle.get(x, y) == 2;
+    } else {
+      self.erasing = puzzle.get(x, y) == 1;
+    }
   }
 
   pub fn is_mouse_down(&self) -> bool {

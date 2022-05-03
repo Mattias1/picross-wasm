@@ -32,21 +32,21 @@ pub fn load_tutorial_puzzle(brush_button_class: &str) {
   let gamestate = get_gamestate();
 
   // Last 4-row
-  toggle_square(gamestate, 1, 3);
-  toggle_square(gamestate, 2, 3);
-  toggle_square(gamestate, 3, 3);
+  handle_click_at(gamestate, 1, 3);
+  handle_click_at(gamestate, 2, 3);
+  handle_click_at(gamestate, 3, 3);
 
   // First 3-column
   gamestate.press_ctrl();
-  toggle_square(gamestate, 1, 0);
+  handle_click_at(gamestate, 1, 0);
   gamestate.release_ctrl();
-  toggle_square(gamestate, 1, 2);
+  handle_click_at(gamestate, 1, 2);
 
   // (First) 2-row
   gamestate.press_ctrl();
-  toggle_square(gamestate, 0, 0);
+  handle_click_at(gamestate, 0, 0);
   gamestate.release_ctrl();
-  toggle_square(gamestate, 3, 0);
+  handle_click_at(gamestate, 3, 0);
 }
 
 #[wasm_bindgen]
@@ -111,13 +111,14 @@ fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
   let mouseenter_func = Closure::wrap(Box::new(move || {
     let gamestate = get_gamestate();
     if gamestate.is_mouse_down() {
-      toggle_square(gamestate, x, y);
+      handle_click_at(gamestate, x, y);
     }
   }) as Box<dyn FnMut()>);
 
   let click_func = Closure::wrap(Box::new(move || {
     let gamestate = get_gamestate();
-    toggle_square(gamestate, x, y);
+    gamestate.mark_erase_or_not(x, y);
+    handle_click_at(gamestate, x, y);
   }) as Box<dyn FnMut()>);
 
   el.set_draggable(false);
@@ -130,14 +131,9 @@ fn add_puzzle_onclick(el: &HtmlElement, x: usize, y: usize) {
   click_func.forget();
 }
 
-fn toggle_square(gamestate: &mut GameState, x: usize, y: usize) {
-  let is_ctrl_down = gamestate.is_ctrl_down();
+fn handle_click_at(gamestate: &mut GameState, x: usize, y: usize) {
+  gamestate.modify_square(x, y);
   let puzzle = gamestate.get_puzzle();
-  if is_ctrl_down {
-    puzzle.toggle_empty(x, y);
-  } else {
-    puzzle.toggle_filled(x, y);
-  }
   let class_name = puzzle.get_class_name(x, y);
 
   let document = get_document();
