@@ -5,7 +5,7 @@ A little picross app I made to play with WebAssembly and Rust.
 Dev setup
 ----------
 Install rust and web assembly (wasm) compilation.
-```
+```bash
 curl https://sh.rustup.rs -sSf | sh
 rustup target add wasm32-unknown-unknown
 cargo install wasm-gc
